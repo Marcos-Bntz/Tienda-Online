@@ -24,7 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     if (hasHalfStar) {
       stars.push(
-        <div key="half\" className="relative">
+        <div key="half" className="relative">
           <Star className="w-4 h-4 text-[#FF9900]" />
           <div className="absolute top-0 left-0 w-1/2 overflow-hidden">
             <Star className="w-4 h-4 fill-[#FF9900] text-[#FF9900]" />
@@ -70,13 +70,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            isFavorite(product.id) ? removeFavorite(product.id) : addFavorite(product);
+            if (isFavorite(product.id)) {
+              removeFavorite(product.id);
+            } else {
+              addFavorite(product);
+            }
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               e.stopPropagation();
-              isFavorite(product.id) ? removeFavorite(product.id) : addFavorite(product);
+              if (isFavorite(product.id)) {
+                removeFavorite(product.id);
+              } else {
+                addFavorite(product);
+              }
             }
           }}
         >

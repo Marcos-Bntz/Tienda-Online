@@ -104,11 +104,21 @@ const ProductPage: React.FC = () => {
                 <button
                   aria-label={isFavorite(product.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'}
                   tabIndex={0}
-                  onClick={() => isFavorite(product.id) ? removeFavorite(product.id) : addFavorite(product)}
+                  onClick={() => {
+                    if (isFavorite(product.id)) {
+                      removeFavorite(product.id);
+                    } else {
+                      addFavorite(product);
+                    }
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      isFavorite(product.id) ? removeFavorite(product.id) : addFavorite(product);
+                      if (isFavorite(product.id)) {
+                        removeFavorite(product.id);
+                      } else {
+                        addFavorite(product);
+                      }
                     }
                   }}
                   className="ml-1 p-1 rounded-full bg-white hover:bg-gray-100 border border-gray-200 transition-colors"
@@ -233,9 +243,9 @@ const ProductPage: React.FC = () => {
         </div>
         
         {/* Productos relacionados */}
-        {relatedProducts.length > 0 && (
+        {relatedProducts.length > 0 ? (
           <ProductGrid products={relatedProducts} title="Productos relacionados" />
-        )}
+        ) : null}
       </div>
     </div>
   );
