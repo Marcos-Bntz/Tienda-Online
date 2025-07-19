@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface CarouselProps {
@@ -9,12 +9,12 @@ const FeaturedCarousel: React.FC<CarouselProps> = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     if (!isTransitioning) {
       setIsTransitioning(true);
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }
-  };
+  }, [isTransitioning, images.length]);
 
   const prevSlide = () => {
     if (!isTransitioning) {
@@ -36,7 +36,7 @@ const FeaturedCarousel: React.FC<CarouselProps> = ({ images }) => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, [currentIndex, nextSlide]);
 
   useEffect(() => {
     if (isTransitioning) {
