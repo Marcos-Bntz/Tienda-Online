@@ -1,3 +1,4 @@
+import React from 'react';
 // @vitest-environment jsdom
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
