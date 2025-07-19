@@ -129,13 +129,13 @@ const HomePage: React.FC = () => {
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-lg font-bold text-gray-900">€{product.price.toFixed(2)}</span>
+                      <span className="text-lg font-bold text-gray-900">${product.price.toFixed(2)}</span>
                       <span className="text-sm text-gray-500 line-through ml-2">
-                        €{product.originalPrice.toFixed(2)}
+                        ${product.originalPrice.toFixed(2)}
                       </span>
                     </div>
                     <span className="text-green-600 text-sm">
-                      Ahorra €{(product.originalPrice - product.price).toFixed(2)}
+                      Ahorra ${ (product.originalPrice - product.price).toFixed(2) }
                     </span>
                   </div>
                 </div>

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Star, Truck, ShieldCheck, RotateCcw, Minus, Plus, ArrowLeft } from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Star, Truck, ShieldCheck, RotateCcw, Minus, Plus, ArrowLeft, Heart } from 'lucide-react';
 import { products } from '../data/products';
 import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
 import ProductGrid from '../components/ProductGrid';
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { addToCart } = useCart();
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
   const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
   
   const product = products.find(p => p.id === Number(id));
   
@@ -23,6 +26,11 @@ const ProductPage: React.FC = () => {
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
+  };
+
+  const handleBuyNow = () => {
+    addToCart(product, quantity);
+    navigate('/cart');
   };
 
   const renderStars = (rating: number) => {
@@ -91,7 +99,23 @@ const ProductPage: React.FC = () => {
 
             {/* Información del producto */}
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">{product.name}</h1>
+              <div className="flex items-center mb-2">
+                <h1 className="text-2xl font-bold text-gray-900 mr-2">{product.name}</h1>
+                <button
+                  aria-label={isFavorite(product.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+                  tabIndex={0}
+                  onClick={() => isFavorite(product.id) ? removeFavorite(product.id) : addFavorite(product)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      isFavorite(product.id) ? removeFavorite(product.id) : addFavorite(product);
+                    }
+                  }}
+                  className="ml-1 p-1 rounded-full bg-white hover:bg-gray-100 border border-gray-200 transition-colors"
+                >
+                  <Heart className={`w-6 h-6 transition-colors ${isFavorite(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400 hover:text-red-500'}`} />
+                </button>
+              </div>
               
               {/* Valoraciones */}
               <div className="flex items-center mb-4">
@@ -109,17 +133,17 @@ const ProductPage: React.FC = () => {
                       <span className="text-sm bg-red-600 text-white px-2 py-0.5 rounded-md mr-2">
                         -{product.discount}%
                       </span>
-                      <span className="text-2xl font-bold text-gray-900">€{product.price.toFixed(2)}</span>
+                      <span className="text-2xl font-bold text-gray-900">${product.price.toFixed(2)}</span>
                     </div>
                     <div className="mt-1 flex items-center">
-                      <span className="text-gray-500 line-through mr-2">€{product.originalPrice.toFixed(2)}</span>
+                      <span className="text-gray-500 line-through mr-2">${product.originalPrice.toFixed(2)}</span>
                       <span className="text-green-600">
-                        Ahorras: €{(product.originalPrice - product.price).toFixed(2)}
+                        Ahorras: ${ (product.originalPrice - product.price).toFixed(2) }
                       </span>
                     </div>
                   </>
                 ) : (
-                  <span className="text-2xl font-bold text-gray-900">€{product.price.toFixed(2)}</span>
+                  <span className="text-2xl font-bold text-gray-900">${product.price.toFixed(2)}</span>
                 )}
               </div>
               
@@ -179,6 +203,7 @@ const ProductPage: React.FC = () => {
                   Añadir al carrito
                 </button>
                 <button
+                  onClick={handleBuyNow}
                   className="bg-[#131921] hover:bg-[#232f3e] text-white py-3 px-6 rounded-md transition-colors font-medium"
                   disabled={product.stock <= 0}
                 >

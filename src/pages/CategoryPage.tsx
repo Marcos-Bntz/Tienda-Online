@@ -5,6 +5,10 @@ import ProductGrid from '../components/ProductGrid';
 import { products, categories } from '../data/products';
 import { Product } from '../types';
 
+function normalize(str: string) {
+  return str.normalize('NFD').replace(/[ 0-9]/g, '').replace(/\p{Diacritic}/gu, '').toLowerCase();
+}
+
 const CategoryPage: React.FC = () => {
   const { category } = useParams<{ category: string }>();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -12,7 +16,7 @@ const CategoryPage: React.FC = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000]);
   const [showFilters, setShowFilters] = useState(false);
   
-  const allCategories = categories.map(c => c.name.toLowerCase());
+  const allCategories = categories.map(c => normalize(c.name));
   
   const getCategoryName = () => {
     if (category === 'all') return 'Todos los productos';
@@ -25,7 +29,7 @@ const CategoryPage: React.FC = () => {
     
     // Filtrar por categoría
     if (category && category !== 'all') {
-      filtered = filtered.filter(p => p.category.toLowerCase() === category);
+      filtered = filtered.filter(p => normalize(p.category) === category);
     }
     
     // Filtrar por rango de precio
@@ -65,7 +69,7 @@ const CategoryPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-2 sm:px-4 py-8">
         {/* Cabecera de la categoría */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold mb-2">{getCategoryName()}</h1>
@@ -74,7 +78,7 @@ const CategoryPage: React.FC = () => {
         
         {/* Controles de filtrado y ordenación */}
         <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0">
             <div className="flex items-center mb-4 md:mb-0">
               <button 
                 onClick={() => setShowFilters(!showFilters)} 
@@ -87,7 +91,7 @@ const CategoryPage: React.FC = () => {
               {/* Mostrar filtros activos */}
               {(priceRange[0] > 0 || priceRange[1] < 2000) && (
                 <div className="flex items-center bg-gray-100 px-3 py-1 rounded text-sm">
-                  <span>Precio: €{priceRange[0]} - €{priceRange[1]}</span>
+                  <span>Precio: ${priceRange[0]} - ${priceRange[1]}</span>
                   <button 
                     onClick={() => setPriceRange([0, 2000])}
                     className="ml-2 text-gray-500 hover:text-gray-700"
@@ -140,8 +144,8 @@ const CategoryPage: React.FC = () => {
                   />
                 </div>
                 <div className="flex justify-between text-sm text-gray-600 mt-1">
-                  <span>€{priceRange[0]}</span>
-                  <span>€{priceRange[1]}</span>
+                  <span>${priceRange[0]}</span>
+                  <span>${priceRange[1]}</span>
                 </div>
               </div>
               
@@ -149,7 +153,7 @@ const CategoryPage: React.FC = () => {
               {category === 'all' && (
                 <div className="mt-4">
                   <h3 className="font-medium mb-3">Categorías</h3>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-4">
                     {categories.map((cat) => (
                       <Link 
                         key={cat.id}
@@ -167,18 +171,18 @@ const CategoryPage: React.FC = () => {
           )}
         </div>
         
-        {/* Rejilla de productos */}
+        {/* Rejilla de productos o mensaje si no hay productos */}
         {filteredProducts.length > 0 ? (
           <ProductGrid products={filteredProducts} />
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-8 text-center">
-            <h2 className="text-xl font-bold mb-4">No se encontraron productos</h2>
-            <p className="text-gray-600 mb-6">Intenta con otros filtros o categorías.</p>
+          <div className="bg-white rounded-lg shadow-md p-4 sm:p-8 text-center max-w-full sm:max-w-xl mx-auto">
+            <h2 className="text-xl font-bold mb-4">No hay productos en esta categoría</h2>
+            <p className="text-gray-600 mb-6">Prueba con otra categoría o vuelve más tarde.</p>
             <Link 
               to="/" 
-              className="inline-block bg-[#FF9900] hover:bg-[#e88a00] text-white font-medium py-2 px-6 rounded-md transition-colors"
+              className="inline-block w-full sm:w-auto bg-[#FF9900] hover:bg-[#e88a00] text-white font-medium py-2 px-6 rounded-md transition-colors"
             >
-              Ver todos los productos
+              Volver al inicio
             </Link>
           </div>
         )}

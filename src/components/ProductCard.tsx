@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Star, ShoppingCart, Heart } from 'lucide-react';
 import { Product } from '../types';
 import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
 
 interface ProductCardProps {
   product: Product;
@@ -10,6 +11,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -63,19 +65,28 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )}
         <button 
           className="absolute top-2 left-2 bg-white p-1.5 rounded-full hover:bg-gray-100 transition-colors"
+          aria-label={isFavorite(product.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+          tabIndex={0}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            // Implementar en versión futura
+            isFavorite(product.id) ? removeFavorite(product.id) : addFavorite(product);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              e.stopPropagation();
+              isFavorite(product.id) ? removeFavorite(product.id) : addFavorite(product);
+            }
           }}
         >
-          <Heart className="w-4 h-4 text-gray-500 hover:text-red-500 transition-colors" />
+          <Heart className={`w-4 h-4 transition-colors ${isFavorite(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-500 hover:text-red-500'}`} />
         </button>
       </div>
 
       <div className="p-4 flex-grow flex flex-col">
         <div className="flex-grow">
-          <h3 className="font-medium text-gray-900 mb-1 line-clamp-2 h-12">{product.name}</h3>
+          <h3 className="font-medium text-gray-900 mb-1 line-clamp-2 h-12 text-base sm:text-lg">{product.name}</h3>
           
           <div className="flex items-center mb-1">
             <div className="flex">{renderStars(product.rating)}</div>
@@ -85,20 +96,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <div className="mb-2">
             {product.discount > 0 ? (
               <div>
-                <span className="text-lg font-bold text-gray-900">€{product.price.toFixed(2)}</span>
+                <span className="text-lg font-bold text-gray-900">${product.price.toFixed(2)}</span>
                 <span className="text-sm text-gray-500 line-through ml-2">
-                  €{product.originalPrice.toFixed(2)}
+                  ${product.originalPrice.toFixed(2)}
                 </span>
               </div>
             ) : (
-              <span className="text-lg font-bold text-gray-900">€{product.price.toFixed(2)}</span>
+              <span className="text-lg font-bold text-gray-900">${product.price.toFixed(2)}</span>
             )}
           </div>
         </div>
         
         <button
           onClick={handleAddToCart}
-          className="w-full mt-2 bg-[#FF9900] hover:bg-[#e88a00] text-white py-2 px-4 rounded-md transition-colors flex items-center justify-center"
+          className="w-full mt-2 bg-[#FF9900] hover:bg-[#e88a00] text-white py-2 px-4 rounded-md transition-colors flex items-center justify-center text-sm sm:text-base"
         >
           <ShoppingCart className="w-4 h-4 mr-2" />
           Añadir al carrito

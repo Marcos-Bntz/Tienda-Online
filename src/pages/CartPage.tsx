@@ -30,10 +30,10 @@ const CartPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-2 sm:px-4">
         <h1 className="text-2xl font-bold mb-6">Tu carrito de compra</h1>
         
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           {/* Productos en el carrito */}
           <div className="lg:w-2/3">
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -63,7 +63,7 @@ const CartPage: React.FC = () => {
                           {item.product.name}
                         </Link>
                         <div className="flex justify-between items-center mt-1 sm:hidden">
-                          <span className="text-sm text-gray-700">€{item.product.price.toFixed(2)}</span>
+                          <span className="text-sm text-gray-700">${item.product.price.toFixed(2)}</span>
                           <button
                             onClick={() => removeFromCart(item.product.id)}
                             className="text-red-500 hover:text-red-700 transition-colors"
@@ -76,7 +76,7 @@ const CartPage: React.FC = () => {
 
                     {/* Precio */}
                     <div className="hidden sm:block text-center">
-                      <span className="text-gray-900">€{item.product.price.toFixed(2)}</span>
+                      <span className="text-gray-900">${item.product.price.toFixed(2)}</span>
                     </div>
 
                     {/* Cantidad */}
@@ -102,7 +102,7 @@ const CartPage: React.FC = () => {
                     <div className="text-center flex items-center justify-between sm:justify-center mt-3 sm:mt-0">
                       <span className="sm:hidden">Subtotal:</span>
                       <span className="font-medium text-gray-900">
-                        €{(item.product.price * item.quantity).toFixed(2)}
+                        ${ (item.product.price * item.quantity).toFixed(2) }
                       </span>
                       <button
                         onClick={() => removeFromCart(item.product.id)}
@@ -116,16 +116,16 @@ const CartPage: React.FC = () => {
               </div>
               
               {/* Acciones del carrito */}
-              <div className="p-4 border-t border-gray-200 bg-gray-50 flex justify-between items-center">
+              <div className="p-4 border-t border-gray-200 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
                 <button
                   onClick={clearCart}
-                  className="text-red-600 hover:text-red-800 text-sm font-medium transition-colors"
+                  className="text-red-600 hover:text-red-800 text-sm font-medium transition-colors w-full sm:w-auto"
                 >
                   Vaciar carrito
                 </button>
                 <Link 
                   to="/" 
-                  className="text-[#FF9900] hover:text-[#e88a00] text-sm font-medium transition-colors"
+                  className="text-[#FF9900] hover:text-[#e88a00] text-sm font-medium transition-colors w-full sm:w-auto text-center"
                 >
                   Seguir comprando
                 </Link>
@@ -135,13 +135,13 @@ const CartPage: React.FC = () => {
           
           {/* Resumen del pedido */}
           <div className="lg:w-1/3">
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
               <h2 className="text-lg font-bold mb-6">Resumen del pedido</h2>
               
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal ({totalItems} productos)</span>
-                  <span className="font-medium">€{totalPrice.toFixed(2)}</span>
+                  <span className="font-medium">${totalPrice.toFixed(2)}</span>
                 </div>
                 
                 <div className="flex justify-between">
@@ -152,7 +152,7 @@ const CartPage: React.FC = () => {
                 <div className="pt-4 border-t border-gray-200">
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-lg">Total</span>
-                    <span className="font-bold text-xl">€{totalPrice.toFixed(2)}</span>
+                    <span className="font-bold text-xl">${totalPrice.toFixed(2)}</span>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">IVA incluido</p>
                 </div>
@@ -182,7 +182,7 @@ const CartPage: React.FC = () => {
                   </p>
                 </div>
                 
-                <button className="w-full bg-[#FF9900] hover:bg-[#e88a00] text-white font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center">
+                <button className="w-full bg-[#FF9900] hover:bg-[#e88a00] text-white font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center mt-4">
                   Finalizar compra
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </button>

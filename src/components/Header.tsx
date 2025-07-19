@@ -21,7 +21,7 @@ const Header: React.FC = () => {
   return (
     <header className="bg-[#131921] text-white sticky top-0 z-50">
       {/* Barra superior */}
-      <div className="container mx-auto px-4 py-2 flex items-center justify-between">
+      <div className="container mx-auto px-2 sm:px-4 py-2 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <ShoppingCart className="h-8 w-8 text-[#FF9900]" />
@@ -112,24 +112,66 @@ const Header: React.FC = () => {
       </div>
 
       {/* Barra de navegación */}
-      <nav className="bg-[#232f3e] py-2 px-4">
+      <nav className="bg-[#232f3e] py-2 px-2 sm:px-4">
         <div className="container mx-auto flex items-center">
           <div className="hidden sm:flex items-center space-x-6 text-sm">
-            <Link to="/category/all" className="hover:text-[#FF9900] transition-colors">Todos los productos</Link>
-            <Link to="/category/electronica" className="hover:text-[#FF9900] transition-colors">Electrónica</Link>
-            <Link to="/category/computacion" className="hover:text-[#FF9900] transition-colors">Computación</Link>
-            <Link to="/category/hogar" className="hover:text-[#FF9900] transition-colors">Hogar</Link>
-            <Link to="/category/moda" className="hover:text-[#FF9900] transition-colors">Moda</Link>
-            <Link to="/category/muebles" className="hover:text-[#FF9900] transition-colors">Muebles</Link>
-            <Link to="/ofertas" className="font-bold text-[#FF9900]">Ofertas</Link>
+            <Link 
+              to="/category/all" 
+              className="hover:text-[#FF9900] transition-colors"
+              tabIndex={0}
+              aria-label="Ver todos los productos"
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { window.location.href = '/category/all'; } }}
+            >Todos los productos</Link>
+            <Link 
+              to="/category/electronica" 
+              className="hover:text-[#FF9900] transition-colors"
+              tabIndex={0}
+              aria-label="Ver productos de Electrónica"
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { window.location.href = '/category/electronica'; } }}
+            >Electrónica</Link>
+            <Link 
+              to="/category/computacion" 
+              className="hover:text-[#FF9900] transition-colors"
+              tabIndex={0}
+              aria-label="Ver productos de Computación"
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { window.location.href = '/category/computacion'; } }}
+            >Computación</Link>
+            <Link 
+              to="/category/hogar" 
+              className="hover:text-[#FF9900] transition-colors"
+              tabIndex={0}
+              aria-label="Ver productos de Hogar"
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { window.location.href = '/category/hogar'; } }}
+            >Hogar</Link>
+            <Link 
+              to="/category/moda" 
+              className="hover:text-[#FF9900] transition-colors"
+              tabIndex={0}
+              aria-label="Ver productos de Moda"
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { window.location.href = '/category/moda'; } }}
+            >Moda</Link>
+            <Link 
+              to="/category/muebles" 
+              className="hover:text-[#FF9900] transition-colors"
+              tabIndex={0}
+              aria-label="Ver productos de Muebles"
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { window.location.href = '/category/muebles'; } }}
+            >Muebles</Link>
+            <Link 
+              to="/ofertas" 
+              className="font-bold text-[#FF9900]"
+              tabIndex={0}
+              aria-label="Ver ofertas"
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { window.location.href = '/ofertas'; } }}
+            >Ofertas</Link>
           </div>
         </div>
       </nav>
 
       {/* Menú móvil */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 sm:hidden">
-          <div className="bg-[#131921] h-full w-[70%] max-w-xs p-4 transform transition-transform duration-300">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 sm:hidden flex">
+          <div className="bg-[#131921] h-full w-[80%] max-w-xs p-4 transform transition-transform duration-300">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">Menú</h2>
               <button onClick={toggleMobileMenu}>
